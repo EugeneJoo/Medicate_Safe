@@ -42,7 +42,7 @@ const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
       };
   
     return (
-      <div style={{ maxWidth: '400px', margin: 'auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
+      <div style={{ position: 'relative', maxWidth: '400px', margin: 'auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
         <h2>Login</h2>
         <button onClick={onClose} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>X</button>
         <form onSubmit={handleSubmit}>
