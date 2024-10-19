@@ -13,20 +13,20 @@ function App() {
  const [error, setError] = useState(null);
  const [showLogin, setShowLogin] = useState(false);
  const [showRegister, setShowRegister] = useState(false);
+ const [profileName, setProfileName] = useState("Profile");
 
  const handleProfileClick = () => {
   setShowLogin(true);
  }
 
  const handleRegister = (credentials) => {
-  // Add your registration implementation here
   console.log('Registering user:', credentials);
   setShowLogin(false);
 };
 
 const handleLogin = (credentials) => {
-  // Add your login implementation here
   console.log('Logging in user:', credentials);
+  setProfileName(credentials.username);
   setShowLogin(false);
 };
 
@@ -68,14 +68,13 @@ const switchToLogin = () => {
  return (
    <div className="App">
       <ProfileIcon
-        imageUrl = "https://stock.adobe.com/search?k=profile+icon&asset_id=299732668"
-        altText = "Profile"
         onClick = {handleProfileClick}
+        text = {profileName}
       />
       {showLogin  && (
         showRegister 
-        ? <Register onRegister={handleRegister} onSwitchToLogin={switchToLogin}/> 
-        : <Login onLogin={handleLogin} onSwitchToRegister={switchToRegister} />
+        ? <Register onRegister={handleRegister} onSwitchToLogin={switchToLogin} onClose = {handleCloseModal}/> 
+        : <Login onLogin={handleLogin} onSwitchToRegister={switchToRegister} onClose = {handleCloseModal}/>
       )}
      <h1>Drug Interaction Checker</h1>
      <div className="input-container">

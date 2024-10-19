@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ProfileIcon = ({ imageUrl, altText, onClick }) => {
+const ProfileIcon = ({ onClick, text }) => {
   return (
     <div className="profile-icon" onClick={onClick} style={{ cursor: 'pointer' }}>
-      <img src={imageUrl} alt={altText} />
+      <h3>{text}</h3>
     </div>
   );
 };
