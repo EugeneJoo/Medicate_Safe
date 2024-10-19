@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import Login from './components/login';
+import Register from './components/register'
+import ProfileIcon from './components/profile';
 
 
 function App() {
@@ -8,6 +11,36 @@ function App() {
  const [drug2, setDrug2] = useState('');
  const [interactionResult, setInteractionResult] = useState(null);
  const [error, setError] = useState(null);
+ const [showLogin, setShowLogin] = useState(false);
+ const [showRegister, setShowRegister] = useState(false);
+
+ const handleProfileClick = () => {
+  setShowLogin(true);
+ }
+
+ const handleRegister = (credentials) => {
+  // Add your registration implementation here
+  console.log('Registering user:', credentials);
+  setShowLogin(false);
+};
+
+const handleLogin = (credentials) => {
+  // Add your login implementation here
+  console.log('Logging in user:', credentials);
+  setShowLogin(false);
+};
+
+const handleCloseModal = () => {
+  setShowLogin(false);
+};
+
+const switchToRegister = () => {
+  setShowRegister(true);
+};
+
+const switchToLogin = () => {
+  setShowRegister(false);
+};
 
 
  const checkInteraction = async () => {
@@ -34,6 +67,16 @@ function App() {
 
  return (
    <div className="App">
+      <ProfileIcon
+        imageUrl = "https://stock.adobe.com/search?k=profile+icon&asset_id=299732668"
+        altText = "Profile"
+        onClick = {handleProfileClick}
+      />
+      {showLogin  && (
+        showRegister 
+        ? <Register onRegister={handleRegister} onSwitchToLogin={switchToLogin}/> 
+        : <Login onLogin={handleLogin} onSwitchToRegister={switchToRegister} />
+      )}
      <h1>Drug Interaction Checker</h1>
      <div className="input-container">
        <input
