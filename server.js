@@ -6,6 +6,24 @@ const app = express();
 const PORT = 5001;
 const mysql = require("mysql");
 const bcrypt = require('bcrypt');
+const fetch = require('node-fetch');
+
+async function query(data) {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+    {
+      headers: {
+        Authorization: "Bearer ",  // Replace with your Hugging Face API key
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+  const result = await response.json();
+  return result;
+}
+
 
 var userid;
 
@@ -66,9 +84,20 @@ app.get('/check-interaction', async (req, res) => {
       // Extract drug interaction information
      const drug1Interactions = response1.data.results[0]?.drug_interactions || 'No interaction info found';
      const drug2Interactions = response2.data.results[0]?.drug_interactions || 'No interaction info found';
-      res.json({
+     
+     const fullInteractionText = `Drug 1 (${drug1}) Interactions: ${drug1Interactions}. Drug 2 (${drug2}) Interactions: ${drug2Interactions}.`;
+
+     console.log("hi")
+
+     const summary = await query({ inputs: fullInteractionText });
+
+     // Log the full response to check the structure
+     console.log('Hugging Face response:', summary);
+ 
+     res.json({
        drug1: { name: drug1, interactions: drug1Interactions },
        drug2: { name: drug2, interactions: drug2Interactions },
+       summary: summary[0].summary_text
      });
    } catch (error) {
      console.error(error);

@@ -102,6 +102,9 @@ const switchToLogin = () => {
        <div className="result">
          <h2>Interaction Result:</h2>
          <pre>{JSON.stringify(interactionResult, null, 2)}</pre>
+         <h3>Summary:</h3>
+          <p>{interactionResult.summary}</p>
+
        </div>
      )}
    </div>
