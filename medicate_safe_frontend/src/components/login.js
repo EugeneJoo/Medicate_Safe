@@ -2,14 +2,44 @@
 import React, { useState } from 'react';
 
 const Login = ({ onLogin, onSwitchToRegister }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [Username, setUsername] = useState('');
+    const [Password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
   
-    const handleSubmit = (event) => {
+  
+    const handleSubmit = async(event) => {
       event.preventDefault();
-      // Add your login logic here, e.g., calling an API to authenticate
-      onLogin({ username, password });
-    };
+  
+      try {
+        // Call the registration API
+        const response = await fetch('http://localhost:5001/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({Username, Password }),
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          // Handle success (e.g., display a success message, or call `onRegister`)
+          setSuccessMessage('Logged in!');
+          setErrorMessage('');
+          // Optionally, call the `onRegister` function after successful registration
+          onLogin(data);
+        } else {
+          // Handle error response (e.g., user already exists)
+          setErrorMessage(data.message || 'Login failed');
+          setSuccessMessage('');
+        }
+      } catch (error) {
+        // Handle network or other errors
+        setErrorMessage('Error: Unable to login. Please try again.');
+        setSuccessMessage('');
+      }
+      };
   
     return (
       <div style={{ maxWidth: '400px', margin: 'auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
@@ -20,7 +50,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
             <input
               type="text"
               id="username"
-              value={username}
+              value={Username}
               onChange={(e) => setUsername(e.target.value)}
               required
               style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
@@ -31,7 +61,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
             <input
               type="password"
               id="password"
-              value={password}
+              value={Password}
               onChange={(e) => setPassword(e.target.value)}
               required
               style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}

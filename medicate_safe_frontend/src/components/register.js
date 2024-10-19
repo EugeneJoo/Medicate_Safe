@@ -1,13 +1,42 @@
 import React, { useState } from 'react';
 
 const Register = ({ onRegister, onSwitchToLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [Username, setUsername] = useState('');
+  const [Password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    // Add your registration logic here, e.g., calling an API to create an account
-    onRegister({ username, password });
+
+    try {
+      // Call the registration API
+      const response = await fetch('http://localhost:5001/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({Username, Password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle success (e.g., display a success message, or call `onRegister`)
+        setSuccessMessage('Account created successfully!');
+        setErrorMessage('');
+        // Optionally, call the `onRegister` function after successful registration
+        onRegister(data);
+      } else {
+        // Handle error response (e.g., user already exists)
+        setErrorMessage(data.message || 'Registration failed');
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      // Handle network or other errors
+      setErrorMessage('Error: Unable to register. Please try again.');
+      setSuccessMessage('');
+    }
   };
 
   return (
@@ -19,7 +48,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
           <input
             type="text"
             id="username"
-            value={username}
+            value={Username}
             onChange={(e) => setUsername(e.target.value)}
             required
             style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
@@ -30,7 +59,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
           <input
             type="password"
             id="password"
-            value={password}
+            value={Password}
             onChange={(e) => setPassword(e.target.value)}
             required
             style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
