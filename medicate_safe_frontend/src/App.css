@@ -41,3 +41,8 @@ button {
   object-fit: cover;
   cursor: pointer; /* Optional: Adds a pointer cursor on hover */
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+}
