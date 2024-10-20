@@ -5,7 +5,6 @@ import Login from './components/login';
 import Register from './components/register';
 import ProfileIcon from './components/profile';
 
-// Add new state for controlling dropdown visibility
 const App = () => {
   const [drug1, setDrug1] = useState('');
   const [drug2, setDrug2] = useState('');
@@ -14,7 +13,7 @@ const App = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [profileName, setProfileName] = useState("Profile");
-  const [showDropdown, setShowDropdown] = useState(false); // New state for dropdown visibility
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleProfileClick = () => {
     setShowLogin(true);
@@ -43,8 +42,6 @@ const App = () => {
     setShowRegister(false);
   }
 
-  const interactionResultString = "Interaction Result";
-
   const checkInteraction = async () => {
     setError(null);
     setInteractionResult(null);
@@ -59,7 +56,7 @@ const App = () => {
         params: { drug1, drug2 },
       });
       setInteractionResult(response.data);
-      setShowDropdown(true);  // Show the dropdown when interaction result is fetched
+      setShowDropdown(true);
     } catch (err) {
       setError('Error fetching interaction data. Please try again.');
     }
@@ -67,6 +64,9 @@ const App = () => {
 
   return (
     <div className="App">
+      <div className="banner">
+        <h1>Medicate Safe</h1>
+      </div>
       <ProfileIcon
         onClick={handleProfileClick}
         text={profileName}
@@ -77,6 +77,7 @@ const App = () => {
           : <Login onLogin={handleLogin} onSwitchToRegister={switchToRegister} onClose={handleCloseModal} />
       )}
       <h1>Drug Interaction Checker</h1>
+
       <div className="input-container">
         <input
           type="text"
@@ -97,17 +98,25 @@ const App = () => {
 
       {interactionResult && (
         <>
-          
+          <button onClick={() => setShowDropdown(!showDropdown)}>Show/Hide Interaction Result</button>
+          {showDropdown && (
             <div className="result">
               <h2>Summary:</h2>
               <p>{Array.isArray(interactionResult.summary) && interactionResult.summary.length > 0
                 ? interactionResult.summary[0].summary_text
                 : interactionResult.summary}</p>
-              <button classname = "dropdown-button" onClick={() => setShowDropdown(!showDropdown)}> Show/Hide Interaction Result</button>
-              <h2>{!showDropdown && interactionResultString} </h2>
-              <pre>{!showDropdown && JSON.stringify(interactionResult, null, 2)}</pre>
+              <h2>Interaction Result:</h2>
+              <pre>{JSON.stringify(interactionResult, null, 2)}</pre>
             </div>
+          )}
         </>
+      )}
+
+      {profileName !== "Profile" && (
+        <div className="side-element">
+          <p>Welcome, {profileName}!</p>
+          {/* Add more content or elements here as needed */}
+        </div>
       )}
     </div>
   );

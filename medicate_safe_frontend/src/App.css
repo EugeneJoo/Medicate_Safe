@@ -190,7 +190,31 @@
  
  
  .profile-icon {
+  color: #f4f6f8;
   right: 5%;
-  top: 20px;
+  top: 45px;
  }
+
  
+ .banner {
+  background-color: #00796b; /* Teal background */
+  padding: 10px; /* Some padding */
+  width: 100%; /* Full width */
+  text-align: center; /* Center the text */
+}
+
+.banner h1{
+  color: #f4f6f8;
+}
+
+.side-element {
+  position: fixed;
+  top: 100px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  background-color: #00796b;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
