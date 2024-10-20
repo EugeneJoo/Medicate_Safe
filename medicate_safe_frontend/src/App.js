@@ -135,7 +135,7 @@ const App = () => {
               ? interactionResult.summary[0].summary_text
               : interactionResult.summary}</p>
             <button onClick={() => setShowDropdown(!showDropdown)}>Show/Hide Interaction Result</button>
-            {showDropdown && JSON.stringify(interactionResult, null, 2)}
+            {!showDropdown && JSON.stringify(interactionResult, null, 2)}
           </div>
         </>
       )}
