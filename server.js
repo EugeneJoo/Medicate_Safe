@@ -23,7 +23,7 @@ async function query(data, drug1, drug2) {
       messages: [
         { 
           role: "system", 
-          content: `You are a helpful assistant that summarizes the effects of ${drug1} and ${drug2} and how they interact with each other.` 
+          content: `You are a helpful assistant that concisely summarizes the effects of ${drug1} and ${drug2} and how they interact with each other.` 
         },
         { 
           role: "user", 
