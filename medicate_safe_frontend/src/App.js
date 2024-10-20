@@ -95,17 +95,16 @@ const App = () => {
 
       {interactionResult && (
         <>
-          <button onClick={() => setShowDropdown(!showDropdown)}>Show/Hide Interaction Result</button>
-          {showDropdown && (
+          
             <div className="result">
               <h2>Summary:</h2>
               <p>{Array.isArray(interactionResult.summary) && interactionResult.summary.length > 0
                 ? interactionResult.summary[0].summary_text
                 : interactionResult.summary}</p>
               <h2>Interaction Result:</h2>
-              <pre>{JSON.stringify(interactionResult, null, 2)}</pre>
+              <pre onClick={() => setShowDropdown(!showDropdown)}> Show/Hide Interaction Result</pre>
+              <pre>{showDropdown && JSON.stringify(interactionResult, null, 2)}</pre>
             </div>
-          )}
         </>
       )}
     </div>
