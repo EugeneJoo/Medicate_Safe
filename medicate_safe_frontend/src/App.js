@@ -89,6 +89,10 @@ const App = () => {
     }
   }
 
+  const handleSavedDrugClick = (drug) => {
+    setDrug1(drug);
+  }
+
   return (
     <div className="App">
       <div className="banner">
@@ -141,7 +145,7 @@ const App = () => {
           <h3>Saved Drugs</h3>
           <ul>
             {savedDrugs.map((drug, index) => (
-              <li key={index}>{drug}</li>
+              <li key={index} onClick={() => handleSavedDrugClick(drug)} className="clickable-drug">{drug}</li>
             ))}
           </ul>
           <input
