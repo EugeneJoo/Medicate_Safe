@@ -7,13 +7,14 @@ const PORT = 5001;
 const mysql = require("mysql");
 const bcrypt = require('bcrypt');
 const fetch = require('node-fetch');
+require('dotenv').config();
 
 async function query(data) {
   const response = await fetch(
     "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
     {
       headers: {
-        Authorization: "Bearer ",  // Replace with your Hugging Face API key
+        Authorization: "Bearer "+process.env.HUGGING_FACE_API_KEY, 
         "Content-Type": "application/json",
       },
       method: "POST",
@@ -58,8 +59,17 @@ app.get('/', (req, res) => {
 
 const OPENFDA_API_URL = 'https://api.fda.gov/drug/label.json';
 
+function simpleExtractiveSummary(text, numSentences = 5) {
+  // Split the text into sentences
+  const sentences = text.split('. ').filter(sentence => sentence.length > 0);
+  
+  // Sort sentences by length and take the top 'numSentences'
+  const summarySentences = sentences
+    .sort((a, b) => b.length - a.length) // Sort by length (longest first)
+    .slice(0, numSentences); // Take the top 'numSentences'
 
-
+  return summarySentences.join('. ') + '.';
+}
 
 app.get('/check-interaction', async (req, res) => {
    const { drug1, drug2 } = req.query;
@@ -85,9 +95,11 @@ app.get('/check-interaction', async (req, res) => {
      const drug1Interactions = response1.data.results[0]?.drug_interactions || 'No interaction info found';
      const drug2Interactions = response2.data.results[0]?.drug_interactions || 'No interaction info found';
      
-     const fullInteractionText = `Drug 1 (${drug1}) Interactions: ${drug1Interactions}. Drug 2 (${drug2}) Interactions: ${drug2Interactions}.`;
+     fullInteractionText = `Drug 1 (${drug1}) Interactions: ${drug1Interactions}. Drug 2 (${drug2}) Interactions: ${drug2Interactions}.`;
 
-     console.log("hi")
+     console.log(fullInteractionText)
+     fullInteractionText= simpleExtractiveSummary(fullInteractionText)
+     console.log(fullInteractionText)
 
      const summary = await query({ inputs: fullInteractionText });
 
@@ -97,7 +109,7 @@ app.get('/check-interaction', async (req, res) => {
      res.json({
        drug1: { name: drug1, interactions: drug1Interactions },
        drug2: { name: drug2, interactions: drug2Interactions },
-       summary: summary[0].summary_text
+       summary,
      });
    } catch (error) {
      console.error(error);
@@ -132,11 +144,8 @@ app.get('/check-interaction', async (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  console.log("hello")
   const { Username, Password } = req.body;
   if (!Username || !Password) {
-      console.log("2")
-
       return res.status(400).json({ message: 'Username and password are required' });
   }
 
@@ -144,15 +153,12 @@ app.post('/login', (req, res) => {
     const sql = `SELECT HashedPassword FROM users WHERE Username = ?`;
     con.query(sql, [Username], (err, result) => {
       if (err || result.length === 0) {
-        console.log("1")
-
         return res.status(404).json({ message: 'User not found' });
       }
 
       const HashedPassword = result[0].HashedPassword;
       if (bcrypt.compareSync(Password, HashedPassword)) {
         res.json({ message: 'Login successful' });
-        console.log("3")
         const sql = `SELECT userid FROM users WHERE Username = ?`;
         con.query(sql, [Username], (err, result) => {
           if (err || result.length === 0) {
@@ -163,15 +169,11 @@ app.post('/login', (req, res) => {
         });
       } 
       else {
-        console.log("4")
-
         res.status(401).json({ message: 'Incorrect password' });
       }
     });
   } catch (err) {
     console.error(err);
-    console.log("5")
-
     res.status(500).json({ message: 'Error processing login' });
   }
 });
