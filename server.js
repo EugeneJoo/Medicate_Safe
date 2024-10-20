@@ -9,21 +9,51 @@ const bcrypt = require('bcrypt');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-async function query(data) {
-  const response = await fetch(
-    "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
-    {
-      headers: {
-        Authorization: "Bearer "+process.env.HUGGING_FACE_API_KEY, 
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-    }
-  );
-  const result = await response.json();
-  return result;
+const { Configuration, OpenAIApi } = require('openai');
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+async function query(data, drug1, drug2) {
+  try {
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { 
+          role: "system", 
+          content: `You are a helpful assistant that summarizes the effects of ${drug1} and ${drug2} and how they interact with each other.` 
+        },
+        { 
+          role: "user", 
+          content: `Summarize the following interaction details: ${data.inputs}` 
+        },
+      ],
+      max_tokens: 200,  // Adjust token limit as needed
+    });
+    return response.data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error with OpenAI API:", error);
+    throw error;
+  }
 }
+
+// async function query(data) {
+//   const response = await fetch(
+//     "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+//     {
+//       headers: {
+//         Authorization: "Bearer "+process.env.HUGGING_FACE_API_KEY, 
+//         "Content-Type": "application/json",
+//       },
+//       method: "POST",
+//       body: JSON.stringify(data),
+//     }
+//   );
+//   const result = await response.json();
+//   return result;
+// }
 
 
 var userid;
@@ -34,13 +64,13 @@ var con = mysql.createConnection({
   password: "c0kef3nt!",
   database: "medicatesafe"
 });
-/*
+
 //connect to mysql
 con.connect((err) => {
   if (err) throw err;
   console.log("Connected to MySQL database!");
 });
-*/
+
 app.use(express.json());  // To handle JSON bodies
 app.use(express.urlencoded({ extended: true }));  // To handle form-encoded bodies
 
@@ -59,15 +89,26 @@ app.get('/', (req, res) => {
 
 const OPENFDA_API_URL = 'https://api.fda.gov/drug/label.json';
 
-function simpleExtractiveSummary(text, numSentences = 5) {
-  // Split the text into sentences
-  const sentences = text.split('. ').filter(sentence => sentence.length > 0);
-  
-  // Sort sentences by length and take the top 'numSentences'
-  const summarySentences = sentences
-    .sort((a, b) => b.length - a.length) // Sort by length (longest first)
-    .slice(0, numSentences); // Take the top 'numSentences'
 
+function simpleExtractiveSummary(text, text2, drug1, drug2, numSentences = 7) {
+  // Split the texts into sentences
+  const sentences = text.split('. ').filter(sentence => sentence.length > 0);
+  const sentences2 = text2.split('. ').filter(sentence => sentence.length > 0);
+
+  // Sort the filtered sentences by length and take the top 'numSentences'
+  let summarySentences = sentences
+    .sort((a, b) => b.length - a.length)
+    .slice(0, numSentences); // Take the top 'numSentences'
+  
+  let summarySentences2 = sentences2
+    .sort((a, b) => b.length - a.length)
+    .slice(0 , numSentences); // Take the top 'numSentences'
+
+  // Concatenate and return the summary
+  drug1=drug1.concat("compare this drug with ");
+  drug1=drug1.concat(drug2);
+  summarySentences = summarySentences.concat(summarySentences2);
+  summarySentences = summarySentences.concat(drug1)
   return summarySentences.join('. ') + '.';
 }
 
@@ -91,17 +132,15 @@ app.get('/check-interaction', async (req, res) => {
          limit: 1,
        },
      });
-      // Extract drug interaction information
-     const drug1Interactions = response1.data.results[0]?.drug_interactions || 'No interaction info found';
-     const drug2Interactions = response2.data.results[0]?.drug_interactions || 'No interaction info found';
+     // Extract drug interaction information
+     drug1Interactions = response1.data.results[0]?.drug_interactions || 'No interaction info found';
+     drug2Interactions = response2.data.results[0]?.drug_interactions || 'No interaction info found';
      
      fullInteractionText = `Drug 1 (${drug1}) Interactions: ${drug1Interactions}. Drug 2 (${drug2}) Interactions: ${drug2Interactions}.`;
 
-     console.log(fullInteractionText)
-     fullInteractionText= simpleExtractiveSummary(fullInteractionText)
-     console.log(fullInteractionText)
+     fullInteractionText= simpleExtractiveSummary(String(drug1Interactions),String(drug2Interactions),String(drug1), String(drug2))
 
-     const summary = await query({ inputs: fullInteractionText });
+     const summary = await query({ inputs: fullInteractionText }, drug1, drug2);
 
      // Log the full response to check the structure
      console.log('Hugging Face response:', summary);
