@@ -165,9 +165,9 @@ app.get('/check-interaction', async (req, res) => {
 
   try {
     const HashedPassword = bcrypt.hashSync(Password, 10);
-    const sql = `INSERT INTO users (Username, HashedPassword) VALUES (?, ?)`;
+    const sql = `INSERT INTO users (Username, HashedPassword, NumOfMeds) VALUES (?, ?, ?)`;
 
-    con.query(sql, [Username, HashedPassword], (err, result) => {
+    con.query(sql, [Username, HashedPassword, 0], (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error registering user' });
@@ -204,7 +204,7 @@ app.post('/login', (req, res) => {
             return res.status(404).json({ message: 'User not found' });
           }
           userid=result[0].userid;
-          console.log(userid)
+          console.log(userid);
         });
       } 
       else {
@@ -234,8 +234,27 @@ app.post('/adddrug', (req, res) => {
         console.error('Error:', err);
         return res.status(500).json({ message: 'Error adding drug to database' });
       }
+    });
+
+    NumOfMeds=0;
+    const sql1 = `SELECT NumOfMeds FROM users WHERE userid = ?`;
+    con.query(sql1, [userid], (err, result) => {
+      if (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ message: 'Error adding drug to database' });
+      }
+      NumOfMeds=result[0] ? result[0].NumOfMeds : 0;
+    });
+
+    const sql2 = `UPDATE users SET NumOfMeds = ? WHERE userid = ?`;
+    con.query(sql2, [NumOfMeds+1, userid], (err, result) => {
+      if (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ message: 'Error adding drug to database' });
+      }
       res.json({ message: 'Drug added successfully', drug: drug });
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error processing login' });
@@ -243,19 +262,35 @@ app.post('/adddrug', (req, res) => {
 });
 
 app.post('/accessdrugs', (req, res) => {
+  if (!userid) {
+    return res.status(400).json({ message: 'Please login' });
+  }
+
   try {
-    const sql = `SELECT medication FROM medications WHERE userid = ?`;
+    const sql = 'SELECT NumOfMeds FROM users WHERE userid = ?';
     con.query(sql, [userid], (err, result) => {
       if (err) {
         return res.status(500).json({ message: 'Error' });
       }
+      // Make sure we have a valid result
+      const NumOfMeds = result[0] ? result[0].NumOfMeds : 0;
+      console.log("NumOfMeds fetched:", NumOfMeds);
 
-      if (medicationsResult.length === 0) {
-        return res.status(404).json({ message: 'No medications found' });
-      }
+      // If the user has medications, fetch the list of medications
+      if (NumOfMeds > 0) {
+        console.log("Fetching medications...");
+        const sql1 = `SELECT medication FROM medications WHERE userid = ?`;
+        con.query(sql1, [userid], (err, Result) => {
+          if (err) {
+            console.error('Error fetching medications:', err);
+            return res.status(500).json({ message: 'Error fetching medications' });
+          }
 
-      const medications = medicationsResult.map(row => row.medication);
-      res.json({ medications });
+          const medications = Result.map(row => row.medication);
+
+          res.json({ medications });
+        });
+      } 
     });
   } catch (err) {
     console.error(err);
