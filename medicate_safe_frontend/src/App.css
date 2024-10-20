@@ -2,50 +2,62 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* Set a basic font and background */
-body {
+ }
+ 
+ 
+ 
+ 
+ body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #f4f6f8;
   color: #333;
   line-height: 1.6;
-}
-
-/* Wrapper styling */
-.App {
+ }
+ 
+ 
+ 
+ 
+ .App {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-}
-
-h1 {
+  text-align: center;
+  min-height: 100vh;
+ }
+ 
+ 
+ h1 {
   font-size: 2rem;
-  color: #00529B; /* Dark blue color */
+  color: #00796b;
   margin-bottom: 20px;
-}
-
-.input-container {
+ }
+ 
+ 
+ .input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
   width: 100%;
   max-width: 500px;
-}
-
-.input-container input {
+ }
+ 
+ 
+ .input-container input {
   width: 80%;
   padding: 10px;
   margin: 5px 0;
-  border: 1px solid #ccc;
+  border: 1px solid #00796b;
   border-radius: 5px;
-}
-
-/* Button styling */
-button {
-  background-color: #00529B; /* Dark blue color */
+  font-size: 1rem;
+ }
+ 
+ 
+ 
+ 
+ button {
+  background-color: #00796b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -53,25 +65,29 @@ button {
   font-size: 1rem;
   cursor: pointer;
   margin-top: 10px;
-}
-
-button:hover {
-  background-color: #003B73; /* Darker blue on hover */
-}
-
-/* Error messages */
-.error {
-  color: #D8000C;
-  background-color: #FFD2D2;
+ }
+ 
+ 
+ button:hover {
+  background-color: #004d40;
+ }
+ 
+ 
+ 
+ 
+ .error {
+  color: #D32F2F;
+  background-color: #FFCDD2;
   padding: 10px;
   border-radius: 5px;
   margin-top: 10px;
-}
-
-/* Result container */
-.result {
-  background-color: white;
-  border: 1px solid #ccc;
+ }
+ 
+ 
+ /* Result container */
+ .result {
+  background-color: #ffffff;
+  border: 1px solid #00796b; /* Teal border */
   border-radius: 5px;
   padding: 20px;
   width: 100%;
@@ -79,23 +95,42 @@ button:hover {
   margin-top: 20px;
   overflow-x: auto; /* Makes the box horizontally scrollable */
   word-wrap: break-word; /* Ensures long words break to the next line */
-}
-
-.result h2 {
-  color: #00529B;
+ }
+ 
+ 
+ .result h2 {
+  color: #00796b; /* Teal color */
   margin-bottom: 10px;
-}
-
-/* Profile icon */
-.profile-icon {
+ }
+ 
+ 
+ .result pre {
+  white-space: pre-wrap; /* Wrap text in preformatted content */
+  word-break: break-all; /* Break long words */
+ }
+ 
+ 
+ /* Profile icon */
+ .profile-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 20px;
-}
-
-/* Modal styling (Assuming Login and Register use a modal) */
-.modal {
+ }
+ 
+ 
+ .profile-icon img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+ }
+ 
+ 
+ /* Modal styling */
+ .modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -105,9 +140,10 @@ button:hover {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-}
-
-.modal-overlay {
+ }
+ 
+ 
+ .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -115,54 +151,46 @@ button:hover {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
-}
-
-
-.App {
-  position: relative;
-  min-height: 100vh;
-  text-align: center;
-  padding: 20px;
-}
-
-.input-container {
-  margin-bottom: 20px;
-}
-
-input {
-  padding: 10px;
-  margin-right: 10px;
-  width: 200px;
-}
-
-button {
-  padding: 10px 20px;
-}
-
-.error {
-  color: red;
-}
-
-.result {
-  margin-top: 20px;
-  text-align: left;
-}
-
-.profile-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.profile-icon img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer; /* Optional: Adds a pointer cursor on hover */
-}
-
-form {
+ }
+ 
+ 
+ /* Form styling */
+ form {
   display: flex;
   flex-direction: column;
-}
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+ }
+ 
+ 
+ /* Specific styles for forms within input-container */
+ .input-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+ }
+ 
+ 
+ button {
+  width: 100%;
+ }
+ 
+ 
+ .error {
+  color: red;
+ }
+ 
+ 
+ .result {
+  margin-top: 20px;
+  text-align: left;
+ }
+ 
+ 
+ .profile-icon {
+  right: 5%;
+  top: 20px;
+ }
+ 

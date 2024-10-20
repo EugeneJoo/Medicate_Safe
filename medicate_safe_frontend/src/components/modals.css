@@ -1,96 +1,126 @@
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-/* Applying base font styling and a background color to the body */
-body {
+    box-sizing: border-box;
+ }
+ 
+ 
+ 
+ 
+ body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: #f4f6f8;
     color: #333;
     line-height: 1.6;
-}
-
-/* Styles for the login container box */
-.login-container {
+ }
+ 
+ 
+ 
+ 
+ .login-container{
     position: relative;
-    max-width: 350px;  /* Slightly smaller width */
+    max-width: 350px; 
     margin: auto;
     padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #00796b;
+    border-radius: 5px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Adding a subtle box shadow */
-}
-
-.login-container h2 {
-    font-size: 1.5rem; /* Smaller heading */
-    margin-bottom: 1rem;
-    text-align: center;  /* Center-aligning for a cleaner look */
-}
-
-/* Always visible close button */
-.close-button {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+ }
+ 
+ 
+ .login-container h2{
+    font-size: 1.5rem;
+    color: #00796b;
+    margin-bottom: 0.5rem;
+    text-align: center; 
+ }
+ 
+ 
+ 
+ 
+ .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 10%;
     background: none;
     border: none;
-    font-size: 1rem;  /* Adjusting the size to be smaller and consistent */
+    font-size: 1rem; 
     cursor: pointer;
-    color: #333;  /* Ensuring it's visible */
-}
-
-.form-group {
-    margin-bottom: 0.75rem;  /* Reduced margin for compactness */
-}
-
-.form-group label {
+    color: #333; 
+    padding: 0;   
+    width: auto; 
+    height: auto;
+ }
+ 
+ 
+ 
+ 
+ .form-group {
+    margin-bottom: 0.75rem; 
+ }
+ 
+ 
+ .form-group label {
     display: block;
-    margin-bottom: 0.25rem;  /* Reduced margin for compactness */
-}
-
-.form-group input {
+    margin-bottom: 0.25rem; 
+ }
+ 
+ 
+ .form-group input {
     width: 100%;
-    padding: 0.5rem;  /* Smaller padding */
-    margin-top: 0.25rem;  /* Reduced margin for a closer alignment */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.875rem;  /* Smaller font size */
-}
-
-.submit-button {
-    padding: 0.5rem;  /* Reduced padding */
+    padding: 10px;
+    margin-top: 0.25rem;
+    border: 1px solid #00796b;
+    border-radius: 5px;
+    font-size: 1rem; 
+ }
+ 
+ 
+ 
+ 
+ .submit-button {
+    padding: 10px 20px; 
     width: 100%;
-    background: #007bff;
+    background: #00796b;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; 
     cursor: pointer;
-    font-size: 0.875rem;  /* Matching the input font size */
-}
-
-/* Hover state for the submit button */
-.submit-button:hover {
-    background: #0056b3;
-}
-
-p {
+    font-size: 1rem;
+ }
+ 
+ 
+ 
+ 
+ .submit-button:hover {
+    background: #004d40;
+ }
+ 
+ 
+ 
+ 
+ p {
     margin-top: 1rem;
     text-align: center;
-    font-size: 0.875rem;  /* Smaller text size */
-}
-
-.switch-button {
-    color: #007bff;
+    font-size: 1rem; 
+ }
+ 
+ 
+ 
+ 
+ .switch-button {
+    color: #00796b;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 0.875rem;  /* Matching the text size */
-}
-
-/* Hover state for the switch button: Only underline */
-.switch-button:hover {
+    font-size: 1rem; 
+ }
+ 
+ 
+ 
+ 
+ .switch-button:hover {
     text-decoration: underline;
-}
+ }
+ 
