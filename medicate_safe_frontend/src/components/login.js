@@ -1,5 +1,5 @@
-//login.js
 import React, { useState } from 'react';
+import './modals.css'; // Import the CSS file
 
 const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
     const [Username, setUsername] = useState('');
@@ -7,12 +7,10 @@ const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
   
-  
     const handleSubmit = async(event) => {
       event.preventDefault();
   
       try {
-        // Call the registration API
         const response = await fetch('http://localhost:5001/login', {
           method: 'POST',
           headers: {
@@ -24,29 +22,25 @@ const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
         const data = await response.json();
   
         if (response.ok) {
-          // Handle success (e.g., display a success message, or call `onRegister`)
           setSuccessMessage('Logged in!');
           setErrorMessage('');
-          // Optionally, call the `onRegister` function after successful registration
           onLogin(data);
         } else {
-          // Handle error response (e.g., user already exists)
           setErrorMessage(data.message || 'Login failed');
           setSuccessMessage('');
         }
       } catch (error) {
-        // Handle network or other errors
         setErrorMessage('Error: Unable to login. Please try again.');
         setSuccessMessage('');
       }
       };
   
     return (
-      <div style={{ position: 'relative', maxWidth: '400px', margin: 'auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
+      <div className="login-container">
         <h2>Login</h2>
-        <button onClick={onClose} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>X</button>
+        <button className="close-button" onClick={onClose}>X</button>
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
               type="text"
@@ -54,10 +48,9 @@ const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
               value={Username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
             />
           </div>
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
               type="password"
@@ -65,19 +58,17 @@ const Login = ({ onLogin, onSwitchToRegister, onClose }) => {
               value={Password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
             />
           </div>
-          <button type="submit" style={{ padding: '0.75rem', width: '100%', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
+          <button type="submit" className="submit-button">
             Login
           </button>
         </form>
-        <p style={{ marginTop: '1rem' }}>
-          Don't have an account? <button onClick={onSwitchToRegister} style={{ color: '#007bff', background: 'none', border: 'none', cursor: 'pointer' }}>Create Account</button>
+        <p>
+          Don't have an account? <button className="switch-button" onClick={onSwitchToRegister}>Create Account</button>
         </p>
       </div>
     );
   };
-  
 
 export default Login;

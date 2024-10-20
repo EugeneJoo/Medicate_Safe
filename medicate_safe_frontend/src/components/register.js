@@ -1,4 +1,6 @@
+// Register.js
 import React, { useState } from 'react';
+import './modals.css'; // Reusing the CSS file for styling
 
 const Register = ({ onRegister, onSwitchToLogin, onClose }) => {
   const [Username, setUsername] = useState('');
@@ -10,41 +12,36 @@ const Register = ({ onRegister, onSwitchToLogin, onClose }) => {
     event.preventDefault();
 
     try {
-      // Call the registration API
       const response = await fetch('http://localhost:5001/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({Username, Password }),
+        body: JSON.stringify({Username, Password}),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Handle success (e.g., display a success message, or call `onRegister`)
         setSuccessMessage('Account created successfully!');
         setErrorMessage('');
-        // Optionally, call the `onRegister` function after successful registration
         onRegister(data);
       } else {
-        // Handle error response (e.g., user already exists)
         setErrorMessage(data.message || 'Registration failed');
         setSuccessMessage('');
       }
     } catch (error) {
-      // Handle network or other errors
       setErrorMessage('Error: Unable to register. Please try again.');
       setSuccessMessage('');
     }
   };
 
   return (
-    <div style={{ position: 'relative', maxWidth: '400px', margin: 'auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <div className="login-container"> {/* Changed to use CSS class */}
       <h2>Create Account</h2>
-      <button onClick={onClose} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>X</button>
+      <button className="close-button" onClick={onClose}>X</button> {/* Changed to use CSS class */}
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
+        <div className="form-group"> {/* Changed to use CSS class */}
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -52,10 +49,10 @@ const Register = ({ onRegister, onSwitchToLogin, onClose }) => {
             value={Username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
+            className="input-field"
           />
         </div>
-        <div style={{ marginBottom: '1rem' }}>
+        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -63,15 +60,15 @@ const Register = ({ onRegister, onSwitchToLogin, onClose }) => {
             value={Password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
+            className="input-field"
           />
         </div>
-        <button type="submit" style={{ padding: '0.75rem', width: '100%', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
+        <button type="submit" className="submit-button">
           Create Account
         </button>
       </form>
-      <p style={{ marginTop: '1rem' }}>
-        Already have an account? <button onClick={onSwitchToLogin} style={{ color: '#007bff', background: 'none', border: 'none', cursor: 'pointer' }}>Log In</button>
+      <p>
+        Already have an account? <button className="switch-button" onClick={onSwitchToLogin}>Log In</button> {/* Changed to use CSS class */}
       </p>
     </div>
   );
