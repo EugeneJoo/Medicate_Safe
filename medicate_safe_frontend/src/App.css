@@ -209,8 +209,8 @@
 
 .side-element {
   position: fixed;
-  top: 100px; /* Adjust as needed */
-  right: 20px; /* Adjust as needed */
+  top: 140px; /* Adjust as needed */
+  right: 75px; /* Adjust as needed */
   background-color: #00796b;
   color: white;
   padding: 15px;

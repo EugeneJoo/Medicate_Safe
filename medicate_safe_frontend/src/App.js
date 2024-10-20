@@ -114,8 +114,19 @@ const App = () => {
 
       {profileName !== "Profile" && (
         <div className="side-element">
-          <p>Welcome, {profileName}!</p>
-          {/* Add more content or elements here as needed */}
+          <h3>Saved Drugs</h3>
+          <ul>
+            {savedDrugs.map((drug, index) => (
+              <li key={index}>{drug}</li>
+            ))}
+          </ul>
+          <input
+            type="text"
+            placeholder="Add new drug"
+            value={newDrug}
+            onChange={handleNewDrugChange}
+          />
+          <button onClick={handleAddDrug}>Add Drug</button>
         </div>
       )}
     </div>
