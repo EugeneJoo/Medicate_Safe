@@ -9,7 +9,7 @@ While the collegiate application was the motivation behind the project as studen
 
 
 
-This project utilizes the FDA's openFDA API in order to query for information about the inputted drugs. It then utilizes openAI's chatgpt-3.5 turbo API with the results from openFDA in order to construct a specific, relevant input. This input combines the breadth of chatgpt with the depth of openFDA, creating a well-rounded summary that is digestible to the reader while including the crucial drug information. 
+This project utilizes the Food and Drug Administration's openFDA API in order to query for information about the inputted drugs. It then utilizes OpenAI's ChatGPT-3.5 turbo API with the results from openFDA in order to construct a specific, relevant input. This input combines the breadth of ChatGPT with the depth of openFDA, creating a well-rounded summary that is digestible to the reader while including the crucial drug information. We took advantage of the vast amounts of data that ChatGPT was trained on while ensuring that its summary would remain accuarate and concise, mitigating one of the biggest downsides of ChatGPT being giving outright incorrect or too generic of information.
 
 
 References:
