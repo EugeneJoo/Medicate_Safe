@@ -34,13 +34,13 @@ var con = mysql.createConnection({
   password: "c0kef3nt!",
   database: "medicatesafe"
 });
-
+/*
 //connect to mysql
 con.connect((err) => {
   if (err) throw err;
   console.log("Connected to MySQL database!");
 });
-
+*/
 app.use(express.json());  // To handle JSON bodies
 app.use(express.urlencoded({ extended: true }));  // To handle form-encoded bodies
 

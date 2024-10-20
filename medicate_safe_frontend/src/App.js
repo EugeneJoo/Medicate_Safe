@@ -94,7 +94,7 @@ const switchToLogin = () => {
      </div>
 
 
-     {error && <p className="error">{error}</p>}
+     {error && <p className="error">{typeof error === 'string' ? error : JSON.stringify(error)}</p>}
 
 
      {interactionResult && (
@@ -102,7 +102,7 @@ const switchToLogin = () => {
          <h2>Interaction Result:</h2>
          <pre>{JSON.stringify(interactionResult, null, 2)}</pre>
          <h3>Summary:</h3>
-          <p>{interactionResult.summary}</p>
+         <p>{typeof interactionResult.summary === 'string' ? interactionResult.summary : JSON.stringify(interactionResult.summary)}</p>
 
        </div>
      )}
