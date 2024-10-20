@@ -131,27 +131,7 @@ const App = () => {
               ? interactionResult.summary[0].summary_text
               : interactionResult.summary}</p>
             <button onClick={() => setShowDropdown(!showDropdown)}>Show/Hide Interaction Result</button>
-            {showDropdown && (
-            <div className="result">
-              <h2>Interaction Results</h2>
-              <h3>Drug 1: {interactionResult.drug1.name}</h3>
-              <p>Interactions:</p>
-              <ul>
-                {interactionResult.drug1.interactions.map((interaction, index) => (
-                  <li key={index}>{interaction}</li>
-                ))}
-              </ul>
-              <h3>Drug 2: {interactionResult.drug2.name}</h3>
-              <p>Interactions:</p>
-              <ul>
-                {interactionResult.drug2.interactions.map((interaction, index) => (
-                  <li key={index}>{interaction}</li>
-                ))}
-              </ul>
-              <h3>Summary</h3>
-              <p>{interactionResult.summary}</p>
-            </div>
-          )}
+            {showDropdown && JSON.stringify(interactionResult, null, 2)}
           </div>
         </>
       )}
