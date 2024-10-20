@@ -87,7 +87,7 @@ const App = () => {
     } catch (err) {
       setError('Error fetching interaction data. Please try again.');
     }
-  };
+  }
 
   return (
     <div className="App">
