@@ -217,6 +217,53 @@ app.post('/login', (req, res) => {
   }
 });
 
+app.post('/adddrug', (req, res) => {
+  const { drug } = req.body;
+  if (!drug ) {
+    return res.status(400).json({ message: 'Drug name is required' });
+  }
+
+  if(!userid) {
+    return res.status(400).json({ message: 'Please login' });
+  }
+
+  try {
+    const sql = `INSERT INTO medications (medication, userid) VALUES (?,?)`;
+    con.query(sql, [String(drug), userid], (err, result) => {
+      if (err) {
+        console.error('Error:', err);
+        return res.status(500).json({ message: 'Error adding drug to database' });
+      }
+      res.json({ message: 'Drug added successfully', drug: drug });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error processing login' });
+  }
+});
+
+app.post('/accessdrugs', (req, res) => {
+  try {
+    const sql = `SELECT medication FROM medications WHERE userid = ?`;
+    con.query(sql, [userid], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error' });
+      }
+
+      if (medicationsResult.length === 0) {
+        return res.status(404).json({ message: 'No medications found' });
+      }
+
+      const medications = medicationsResult.map(row => row.medication);
+      res.json({ medications });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error' });
+  }
+});
+
   app.listen(PORT, () => {
    console.log(`Server running on http://localhost:${PORT}`);
- });
+
+});
