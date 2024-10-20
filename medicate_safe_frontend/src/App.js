@@ -14,6 +14,8 @@ const App = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [profileName, setProfileName] = useState("Profile");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [savedDrugs, setSavedDrugs] = useState([]);
+  const [newDrug, setNewDrug] = useState('');
 
   const handleProfileClick = () => {
     setShowLogin(true);
@@ -24,10 +26,35 @@ const App = () => {
     setShowLogin(false);
   }
 
-  const handleLogin = (credentials) => {
+  const handleLogin = async (credentials) => {
     console.log('Logging in user:', credentials);
     setProfileName(credentials.username);
     setShowLogin(false);
+    fetchSavedDrugs();
+  }
+
+  const fetchSavedDrugs = async () => {
+    try {
+      const response = await axios.post('http://localhost:5001/accessdrugs', { username: profileName });
+      setSavedDrugs(response.data.medications);
+    } catch (err) {
+      setError('Error fetching saved drugs. Please try again.');
+    }
+  }
+
+  const handleNewDrugChange = (e) => {
+    setNewDrug(e.target.value);
+  }
+
+  const handleAddDrug = async () => {
+    if (!newDrug) return;
+    try {
+      const response = await axios.post('http://localhost:5001/adddrug', { drug: newDrug });
+      setSavedDrugs([...savedDrugs, newDrug]);
+      setNewDrug('');
+    } catch (err) {
+      setError('Error adding drug. Please try again.');
+    }
   }
 
   const handleCloseModal = () => {
